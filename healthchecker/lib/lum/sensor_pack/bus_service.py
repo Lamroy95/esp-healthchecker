@@ -8,6 +8,7 @@ from machine import I2C
 
 class BusAdapter:
     """Proxy between I/O bus and device I/O class"""
+
     def __init__(self, bus):
         self.bus = bus
 
@@ -21,8 +22,14 @@ class BusAdapter:
         reg_addr - register address in the address space of the sensor"""
         raise NotImplementedError
 
-    def write_register(self, device_addr: int, reg_addr: int, value: [int, bytes, bytearray],
-                       bytes_count: int, byte_order: str):
+    def write_register(
+        self,
+        device_addr: int,
+        reg_addr: int,
+        value: [int, bytes, bytearray],
+        bytes_count: int,
+        byte_order: str,
+    ):
         """записывает данные value в датчик, по адресу reg_addr.
         bytes_count - кол-во записываемых байт из value.
         byte_order - порядок расположения байт в записываемом значении.
@@ -43,8 +50,14 @@ class I2cAdapter(BusAdapter):
     def __init__(self, bus: I2C):
         super().__init__(bus)
 
-    def write_register(self, device_addr: int, reg_addr: int, value: [int, bytes, bytearray],
-                       bytes_count: int, byte_order: str):
+    def write_register(
+        self,
+        device_addr: int,
+        reg_addr: int,
+        value: [int, bytes, bytearray],
+        bytes_count: int,
+        byte_order: str,
+    ):
         """записывает данные value в датчик, по адресу reg_addr.
         bytes_count - кол-во записываемых данных
         value - должно быть типов int, bytes, bytearray"""
@@ -63,7 +76,7 @@ class I2cAdapter(BusAdapter):
 
     def read(self, device_addr, n_bytes: int) -> bytes:
         return self.bus.readfrom(device_addr, n_bytes)
-    
+
     def read_buf_from_mem(self, device_addr, mem_addr, buf):
         """Читает из устройства с адресом device_addr в буфер buf, начиная с адреса в устройстве mem_addr.
         Количество считываемых байт определяется длинной буфера buf.

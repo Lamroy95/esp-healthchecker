@@ -20,7 +20,9 @@ class LCDAdapter:
     @property
     def _lcd(self) -> LCD:
         if self._lcd is None:
-            raise RuntimeError("LCD service is not started. Call LCDAdapter.start() or use context manager")
+            raise RuntimeError(
+                "LCD service is not started. Call LCDAdapter.start() or use context manager"
+            )
         return self._lcd
 
     @_lcd.setter
@@ -28,7 +30,12 @@ class LCDAdapter:
         self._lcd = value
 
     def start(self):
-        self._lcd = LCD(i2c_addr=self.device_addr, num_columns=self.cols, num_lines=self.rows, i2c=self._i2c)
+        self._lcd = LCD(
+            i2c_addr=self.device_addr,
+            num_columns=self.cols,
+            num_lines=self.rows,
+            i2c=self._i2c,
+        )
         self._lcd.display_on()
 
     def stop(self):
@@ -44,14 +51,18 @@ class LCDAdapter:
 
     def _get_row(self, row_index: int) -> str:
         if row_index > self.rows - 1:
-            raise ValueError(f"Can't get row {row_index}. Available rows: {list(range(self.rows))}")
+            raise ValueError(
+                f"Can't get row {row_index}. Available rows: {list(range(self.rows))}"
+            )
         return self._current_text[row_index]
 
     def _set_row(self, text: str, row_index: int):
         if len(text) > self.cols:
             raise ValueError(f"Line too long. Max chars: {self.cols}")
         if row_index > self.rows - 1:
-            raise ValueError(f"Can't write to this row. Available rows: {list(range(self.rows))}")
+            raise ValueError(
+                f"Can't write to this row. Available rows: {list(range(self.rows))}"
+            )
 
         self._current_text[row_index] = text
 

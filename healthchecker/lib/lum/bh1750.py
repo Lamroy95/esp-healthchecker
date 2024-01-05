@@ -19,11 +19,11 @@ class Bh1750(BaseSensor, Iterator):
         self._measurement_accuracy = 1.0
 
     def __del__(self):
-        self.power(False)   # power off before delete
+        self.power(False)  # power off before delete
 
     def _send_cmd(self, command: int):
         """send 1 byte command to device"""
-        bo = self._get_byteorder_as_str()[0]    # big, little
+        bo = self._get_byteorder_as_str()[0]  # big, little
         self.adapter.write(self.address, command.to_bytes(1, bo))
 
     def get_id(self):
@@ -47,7 +47,7 @@ class Bh1750(BaseSensor, Iterator):
             cmd = 0b0010_0000  # one shot mode
 
         if not high_resolution:
-            cmd |= 0b11    # L-Resolution Mode
+            cmd |= 0b11  # L-Resolution Mode
 
         self._send_cmd(cmd)
         #
@@ -61,7 +61,8 @@ class Bh1750(BaseSensor, Iterator):
         Parameter measurement_accuracy is defined in datasheet.
         However, it can be ignored, since it is close to 1.0, from 0.96 to 1.44!"""
         buf = self._buf_2
-        self.adapter.bus.readfrom_into(self.address, buf)       # tmp = self.adapter.read(self.address, 2)
+        self.adapter.bus.readfrom_into(self.address, buf)
+        # tmp = self.adapter.read(self.address, 2)
         # typical measurement_accuracy is 1.2 (from 0.96 to 1.44 times). Pls. see Measurement Accuracy in datasheet!
         return self.unpack("H", buf)[0] / self._measurement_accuracy
 
